@@ -1,0 +1,213 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import RiseInTransition kivy.uix.screenmanager.RiseInTransition
+#:import C kivy.utils.get_color_from_hex
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+
+
+<ScreenManager>:
+    transition: FadeTransition()
+
+<WarningScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        Label:  # Warning and icon
+            text: "Warning"
+            color: "blue"
+        Label:
+            text: "Message body"
+            color: "blue"
+
+            
+
+<MainScreen>:
+
+    #canvas.before:
+    #    Rectangle:
+    #        pos: self.pos
+    #        size: self.size
+    #        source: "assets/images/blue_bg.jpg"
+
+    AnchorLayout:
+        anchor_x: "left"
+        anchor_y: "top"
+        padding: (20, 20, 0, 0)
+        
+        Button:
+            background_color: 0, 0, 0, 0
+            width: 50
+            height: 50
+            size_hint_x: None
+            size_hint_y: None
+            text: "[font=ModernPictograms]?[/font]"
+            font_size: 60
+            
+            on_press: 
+                root.manager.transition.direction = "right"
+                root.manager.current = "info_screen"
+                
+    AnchorLayout:
+        anchor_x: "right"
+        anchor_y: "top"
+        padding: (0, 0, 20, 20)
+        
+        Label:
+            id: device_label
+            size_hint_x: None
+            size_hint_y: None
+            text: "No device"
+            font_size: 15
+
+    BoxLayout:
+        orientation: "vertical"
+
+        LabelTitle:
+            text: "[b][color=3ee7dc]Credit[/color]Card\nReader[/b]"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+
+        
+        MDSpinner:
+            id: scan_spinner
+            size_hint: None, None
+            size: dp(56), dp(56)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            active: True
+            color: "white"
+
+        Label:
+            background_color: "#333333"
+            id: main_screen_msg
+            text: "Connect the [b][color=3ee7dc]NFC[/color][/b] terminal..."
+            font_size: 24
+        
+
+<InfoScreen>:
+
+    #canvas.before:
+    #    Rectangle:
+    #        pos: self.pos
+    #        size: self.size
+    #        source: "assets/images/blue_bg.jpg"
+
+            
+    BoxLayout:
+        orientation: "vertical"
+        
+        BoxLayout:
+            orientation: "horizontal"
+            padding: 20
+            spacing: 20
+            #---- CreditCardDisplay
+
+            MDFloatLayout:
+                md_bg_color: 0.54, 0.53, 0.53, 0.8
+                size_hint_x: .7
+                radius: [20]
+                MDLabel:
+                    id: card_name
+                    text: ""
+                    font_size: 22
+                    pos_hint: {"center_x": .6, "center_y": .8}
+
+                FitImage:
+                    source: "assets/images/emv_chip.png"
+                    size_hint: None, None
+                    height: 40
+                    width: 40
+                    pos_hint: {"center_x": .1, "center_y": .5}
+                    
+                MDLabel:
+                    id: pan
+                    text: ""
+                    pos_hint: {"center_y": .5}
+                    halign: "center"
+                    font_size: 20
+
+                MDLabel:
+                    id: ed
+                    text: ""
+                    font_size: 15
+                    pos_hint: {"center_x": .6,"center_y": .2}
+
+                MDLabel:
+                    text: "[b]CVV ***[/b]"
+                    font_size: 15
+                    pos_hint: {"center_y": .2}
+                    halign: "right"
+            #----
+            
+            AnchorLayout:
+                #padding: (20, 20, 20, 20)
+                anchor_x: "center"
+                anchor_y: "center"
+                size_hint_x: .3
+                        
+                Button:
+                    size_hint: None, None
+                    width: 80
+                    height: 40
+                    text: "[b][font=Roboto]Export[/font][/b]"
+                    #font_size: 20
+
+        MDSeparator:
+            color: "white"
+
+        Label: 
+            text: "[b][font=Slkscr][color=3ee7dc]Additional[/color][/font] Info[/b]"
+            font_size: 24
+            size_hint_y: None
+            height: 26
+            background_color: "white"
+
+        MDSeparator:
+            color: "white"
+            
+
+        BoxLayout:
+            orientation: "vertical"
+
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+
+                BoxLayout:
+                    id: info_list
+                    orientation: 'vertical'  
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: 20
+
+
+         
+                        
+
+
+
+
+
+
+# Base config
+
+<MDLabel>:
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
+
+
+<Button>:
+    #background_normal: "assets/images/button_normal.png"
+    markup: True
+    halign: "center"
+
+
+<Label>:
+    font_name: "Roboto"
+    markup: True
+
+
+<LabelTitle@Label>:
+    font_name: "Slkscr"
+    font_size: 60
+    markup: True
