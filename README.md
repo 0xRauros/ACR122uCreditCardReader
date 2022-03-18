@@ -34,9 +34,11 @@
   </a>
 
   <h3 align="center">Credit Card Reader</h3>
+  <h2 align="center">Not finished [Building...]</h3>
 
   <p align="center">
     Desktop application 4 reading EMV credit cards. Written in Python and Kivy <3
+                                                                           
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
     <br />
