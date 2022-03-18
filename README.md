@@ -34,7 +34,7 @@
   </a>
 
   <h3 align="center">Credit Card Reader</h3>
-  <h2 align="center">Not finished [Building...]</h3>
+  <h2 align="center">Not finished [Building...]</h2>
 
   <p align="center">
     Desktop application 4 reading EMV credit cards. Written in Python and Kivy <3
