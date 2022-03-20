@@ -79,8 +79,8 @@ class InfoScreen(Screen):
             
             self.info = CreditCardReader.get_VISA_info() # Dictionary
             self.ids.card_name.text = "[b]" + self.info["[50] - Application Label"] + "[/b]"
-            self.ids.pan.text = "[b]" + self.info["Primary Account Number (PAN)"] + "[/b]"
-            self.ids.ed.text = "[b]Expiration Date > " + self.info["Expiration Date"] + "[/b]"
+            self.ids.pan.text = "[b]" + "4036 1111 5434 5906" + "[/b]"
+            self.ids.ed.text = "[b]Expiration Date > " + "02/20" + "[/b]"
             
             # Clear previous data
             self.ids.info_list.clear_widgets()
@@ -93,7 +93,7 @@ class InfoScreen(Screen):
         except Exception as e:    
             print(e)
             self.manager.current = "main_screen"
-            
+
 
     def export_data(self):
         
