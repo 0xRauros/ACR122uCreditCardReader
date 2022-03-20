@@ -40,6 +40,9 @@
 The purpose of this project was to help me understand a little better how credit card transactions work.
 Using an NFC reader like ACR122u the program asks for the PDOL chain and creates
 the apropiate challenge to get the track 2 chain.
+
+<img src="assets/images/acr.jpg" width="300" height="400"/>
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
