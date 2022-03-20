@@ -9,16 +9,38 @@
     transition: FadeTransition()
 
 <WarningScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        Label:  # Warning and icon
-            text: "Warning"
-            color: "blue"
-        Label:
-            text: "Message body"
-            color: "blue"
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "top"
 
+        Image: 
             
+            font_size: 100
+            source: "assets/images/warning.png"
+            size_hint: None, None
+            height: 200
+            width: 200
+
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                halign: "center"
+                font_size: 22
+                text: "[b]Credit Card Reader is a desktop application written in Python and Kivy\nfor reading track 2 data from a smart card.\nThe app requires an NFC reader like the ACR122u.\n\nThis application has been developed for educational\npurposes, so I am not responsible for the malicious use\nof the tool and its possible consequences.[/b]"
+
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "bottom"
+            padding: 50
+            Button:
+                text: "[b]Main Screen[/b]"
+                on_press: 
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "main_screen"
+                size_hint: None, None
+                height: 50
+                width: 100
+                
 
 <MainScreen>:
 
@@ -39,12 +61,12 @@
             height: 50
             size_hint_x: None
             size_hint_y: None
-            text: "[font=ModernPictograms]?[/font]"
+            text: "[font=ModernPictograms]![/font]"
             font_size: 60
             
             on_press: 
                 root.manager.transition.direction = "right"
-                root.manager.current = "info_screen"
+                root.manager.current = "warning_screen"
                 
     AnchorLayout:
         anchor_x: "right"
@@ -150,6 +172,8 @@
                     height: 40
                     text: "[b][font=Roboto]Export[/font][/b]"
                     #font_size: 20
+                    on_press: root.export_data()
+
 
         MDSeparator:
             color: "white"

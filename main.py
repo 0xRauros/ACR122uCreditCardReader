@@ -11,6 +11,8 @@ from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivymd.uix.card import MDSeparator
 from kivymd.uix.list import TwoLineListItem
+from datetime import datetime
+from kivy.uix.popup import Popup
 
 import CreditCardReader
 
@@ -51,6 +53,7 @@ class MainScreen(Screen):
 class InfoScreen(Screen):
 
     connection = None
+    info_dict = None
     
     def on_enter(self):
         
@@ -73,24 +76,43 @@ class InfoScreen(Screen):
             For now only VISA type is available
         '''
         try:
-            info = CreditCardReader.get_VISA_info() # Dictionary
-        except Exception as e:
+            
+            self.info = CreditCardReader.get_VISA_info() # Dictionary
+            self.ids.card_name.text = "[b]" + self.info["[50] - Application Label"] + "[/b]"
+            self.ids.pan.text = "[b]" + self.info["Primary Account Number (PAN)"] + "[/b]"
+            self.ids.ed.text = "[b]Expiration Date > " + self.info["Expiration Date"] + "[/b]"
+            
+            # Clear previous data
+            self.ids.info_list.clear_widgets()
+
+            for k, v in self.info.items():
+                label = Label(text="[b][size=22][color=3ee7dc]"+ k +"[/size][/color]\n" + v + "[/b]", 
+                                    size_hint_y=None, height=60, 
+                                    font_size=14, halign="center")
+                self.ids.info_list.add_widget(label)
+        except Exception as e:    
             print(e)
             self.manager.current = "main_screen"
+            
 
-        self.ids.card_name.text = "[b]" + info["[50] - Application Label"] + "[/b]"
-        self.ids.pan.text = "[b]" + info["Primary Account Number (PAN)"] + "[/b]"
-        self.ids.ed.text = "[b]Expiration Date > " + info["Expiration Date"] + "[/b]"
+    def export_data(self):
         
-        for k, v in info.items():
-            label = Label(text="[b][size=22][color=3ee7dc]"+ k +"[/size][/color]\n" + v + "[/b]", 
-                           size_hint_y=None, height=60, 
-                           font_size=14, halign="center")
+        filename = "ccreaderdata.txt"
+        delimiter = "\n["+str(datetime.now())+"]\n\n"
 
-            self.ids.info_list.add_widget(label)
+        with open(filename, "a+") as file:
+            file.write(delimiter)
+            for k, v in self.info.items():
+                file.write(k+":\n"+v+"\n")
+        
+        popup = Popup(title="[b]Credit Card Info Screen[/b]",
+                content=Label(text="[b]Data exported successfully.[/b]"),
+                size_hint=(None, None), size=(400, 400))
+        popup.open()
+
 
             
-            pass
+            
 
 
 
@@ -106,18 +128,16 @@ class CreditCardReaderApp(MDApp):
         #self.theme_cls.primary_palette = "BlueGray"
 
         sm = ScreenManager()
-        #sm.add_widget(WarningScreen(name="warning_screen"))
+        sm.add_widget(WarningScreen(name="warning_screen"))
         sm.add_widget(MainScreen(name="main_screen"))
         sm.add_widget(InfoScreen(name="info_screen"))
-        
+
         return sm
 
     
 
 
 def load_config():
-
-    Config.set("graphics", "resizeable", True)
 
     LabelBase.register(name="Roboto",
                     fn_regular="assets/fonts/roboto/Roboto-Thin.ttf",

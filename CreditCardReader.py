@@ -3,12 +3,12 @@ from smartcard.util import toHexString, toBytes
 from datetime import datetime
 from random import randint
 from smartcard.Exceptions import CardConnectionException
+from smartcard.CardRequest import CardRequest
+from smartcard.CardType import AnyCardType
 
 
 cmd_ADPU = [0x00, 0xA4, 0x04, 0x00]
 AID4VISA = [0xA0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10] # Visa specific AID
-
-####### Check nfc device and card ########
 
 def available_readers():
     available_readers = []
@@ -88,8 +88,12 @@ def decode_tlv_data(pdol_container_data):
     }
 
     data = pdol_container_data 
-
+    
     for k, v in tags.items():
+
+        if data.find(k) == -1:
+            continue
+
         if len(k) == 2:
             DF_length = int(data[data.find(k)+2:data.find(k)+4], 16) # hex to dec
             DF = data[data.find(k)+4:data.find(k)+4+DF_length*2] # *2 because there is no space between hex values
@@ -130,6 +134,12 @@ def generate_PDOL_response(PDOL):
             if (PDOL_byte_list[index] == 0x9F and PDOL_byte_list[index+1] == 0x66 and PDOL_byte_list[index+2] == 0x04): 
                 data += "F620C000"
                 index += 3            
+            elif (PDOL_byte_list[index] == 0x95):
+                cl = PDOL_byte_list[index+1]
+                while cl > 0:
+                    data += "AA"
+                    cl -= 1
+                index += 2
             elif (PDOL_byte_list[index] == 0x9F and PDOL_byte_list[index+1] == 0x1A and PDOL_byte_list[index+2] == 0x02):
                 data += "0250"
                 index +=3
@@ -143,6 +153,15 @@ def generate_PDOL_response(PDOL):
             elif (PDOL_byte_list[index] == 0x9F and PDOL_byte_list[index+1] == 0x37 and PDOL_byte_list[index+2] == 0x04):
                 unpredictable_number = "{:08x}".format(randint(0, 0xFFFFFFFF))
                 data += unpredictable_number
+                index += 3
+            elif (PDOL_byte_list[index] == 0x9C):
+                data += "00"
+                index += 2
+            elif (PDOL_byte_list[index] == 0x9F and PDOL_byte_list[index+2] == 0x01):
+                cl = PDOL_byte_list[index+2]
+                while cl > 0:
+                    data += "00"
+                    cl -= 1
                 index += 3
             else: # Para combinaciones menores a 3 bytes
                 cl = PDOL_byte_list[index+2]
@@ -237,6 +256,7 @@ def rename_tags_dict_keys(tags_dict):
         File Control Information tags have long values,
         that's why we split them.
     '''
+
     tags_dict = {
         "[6F] - File Control Information": tags_dict["6F"],
         "[84] - Dedicated File": tags_dict["84"],
@@ -253,5 +273,4 @@ def rename_tags_dict_keys(tags_dict):
         if "File Control Information" in k:
             tags_dict[k] = v[:len(v)//2] + "\n" + v[:len(v)//2+1]
              
-
     return tags_dict
