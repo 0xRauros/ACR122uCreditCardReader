@@ -30,6 +30,9 @@
   <p align="center">
     Desktop application 4 reading track 2 of EMV credit cards using ACR122u. 
   </p>
+    <p align="center">
+    Only supports VISA  
+  </p>
 </div>
 
 <!-- ABOUT THE PROJECT -->
