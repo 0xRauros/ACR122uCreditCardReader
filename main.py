@@ -79,8 +79,8 @@ class InfoScreen(Screen):
             
             self.info = CreditCardReader.get_VISA_info() # Dictionary
             self.ids.card_name.text = "[b]" + self.info["[50] - Application Label"] + "[/b]"
-            self.ids.pan.text = "[b]" + "4036 1111 5434 5906" + "[/b]"
-            self.ids.ed.text = "[b]Expiration Date > " + "02/20" + "[/b]"
+            self.ids.pan.text = ""
+            self.ids.ed.text = ""
             
             # Clear previous data
             self.ids.info_list.clear_widgets()
